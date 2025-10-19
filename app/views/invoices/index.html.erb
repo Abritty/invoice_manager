@@ -1,0 +1,95 @@
+<div class="min-h-screen bg-gray-50 py-8">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="mb-8">
+      <div class="flex justify-between items-center">
+        <h1 class="text-3xl font-bold text-gray-900">Invoices</h1>
+        <%= link_to "New Invoice", new_invoice_path, class: "bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" %>
+      </div>
+    </div>
+
+    <!-- Search and Filter Form -->
+    <div class="bg-white shadow rounded-lg p-6 mb-6">
+      <%= form_with url: invoices_path, method: :get, local: true, class: "flex flex-wrap gap-4" do |form| %>
+        <div class="flex-1 min-w-64">
+          <%= form.text_field :search, placeholder: "Search by buyer name...", value: params[:search], class: "w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" %>
+        </div>
+        
+        <div>
+          <%= form.select :state, options_for_select([
+            ['All States', ''],
+            ['Sent', 'sent'],
+            ['Paid', 'paid'],
+            ['Overdue', 'overdue']
+          ], params[:state]), {}, { class: "px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" } %>
+        </div>
+        
+        <div>
+          <%= form.select :sort, options_for_select(Invoice.sort_options_for_select, params[:sort]), {}, { class: "px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" } %>
+        </div>
+        
+        <div>
+          <%= form.submit "Filter", class: "bg-gray-600 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded" %>
+        </div>
+      <% end %>
+    </div>
+
+    <!-- Invoices Table -->
+    <div class="bg-white shadow overflow-hidden sm:rounded-md">
+      <% if @invoices.any? %>
+        <ul class="divide-y divide-gray-200">
+          <% @invoices.each do |invoice| %>
+            <li class="px-6 py-4 hover:bg-gray-50">
+              <div class="flex items-center justify-between">
+                <div class="flex-1 min-w-0">
+                  <div class="flex items-center justify-between">
+                    <div class="flex-1">
+                      <p class="text-sm font-medium text-gray-900 truncate">
+                        <%= invoice.buyer_name %>
+                      </p>
+                      <p class="text-sm text-gray-500">
+                        Phone: <%= invoice.phone_number %>
+                      </p>
+                    </div>
+                    <div class="flex items-center space-x-4">
+                      <div class="text-right">
+                        <p class="text-sm font-medium text-gray-900">
+                          <%= invoice.formatted_amount %>
+                        </p>
+                        <p class="text-sm text-gray-500">
+                          Due: <%= invoice.expiry_date.strftime("%b %d, %Y") %>
+                        </p>
+                      </div>
+                      <div class="flex items-center">
+                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium
+                          <%= case invoice.effective_state
+                              when 'paid' then 'bg-green-100 text-green-800'
+                              when 'overdue' then 'bg-red-100 text-red-800'
+                              else 'bg-yellow-100 text-yellow-800'
+                              end %>">
+                          <%= invoice.effective_state.humanize %>
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="ml-4 flex-shrink-0 flex space-x-2">
+                  <%= link_to "View", invoice_path(invoice), class: "text-blue-600 hover:text-blue-900 text-sm font-medium" %>
+                  <%= link_to "Edit", edit_invoice_path(invoice), class: "text-indigo-600 hover:text-indigo-900 text-sm font-medium" %>
+                  <%= link_to "Delete", invoice_path(invoice), method: :delete, 
+                      data: { confirm: "Are you sure?" }, 
+                      class: "text-red-600 hover:text-red-900 text-sm font-medium" %>
+                </div>
+              </div>
+            </li>
+          <% end %>
+        </ul>
+      <% else %>
+        <div class="text-center py-12">
+          <p class="text-gray-500 text-lg">No invoices found.</p>
+          <%= link_to "Create your first invoice", new_invoice_path, class: "mt-4 inline-block bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" %>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</div>
+

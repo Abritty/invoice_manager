@@ -8,7 +8,6 @@ A comprehensive invoice management application built with Ruby on Rails 8 and Ta
 - **Invoice CRUD**: Create, read, update, and delete invoices
 - **Invoice Management**: Track invoice states (sent, paid, overdue)
 - **Search & Filter**: Search by buyer name, filter by state, sort by various fields
-- **Dashboard**: Overview of invoice statistics and recent activity
 - **Currency Support**: EUR currency formatting throughout the application
 - **Responsive Design**: Beautiful UI built with Tailwind CSS
 

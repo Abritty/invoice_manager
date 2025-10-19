@@ -1,10 +1,12 @@
 class Invoice < ApplicationRecord
+  include PhoneNumberValidator
+  include InvoiceSorting
+
   belongs_to :user
 
   enum :state, { sent: 0, paid: 1, overdue: 2 }
 
   validates :buyer_name, presence: true
-  validates :phone_number, presence: true, format: { with: /\A[\d\s\+\-\(\)]+\z/, message: "can only contain digits, spaces, +, -, and ()" }, length: { in: 7..20 }
   validates :invoice_issue_date, presence: true
   validates :expiry_date, presence: true
   validates :amount, presence: true, numericality: { greater_than: 0 }
