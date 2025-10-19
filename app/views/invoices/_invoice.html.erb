@@ -1,0 +1,48 @@
+<li class="px-8 py-6 hover:bg-gray-50">
+  <div class="grid grid-cols-12 gap-4 items-center">
+    <!-- Buyer Info -->
+    <div class="col-span-4">
+      <p class="text-lg font-medium text-gray-900">
+        <%= invoice.buyer_name %>
+      </p>
+        <%= invoice.phone_number %>
+      </p>
+    </div>
+    
+    <!-- Amount -->
+    <div class="col-span-2 text-center">
+      <p class="text-lg font-semibold text-gray-900">
+        <%= invoice.formatted_amount %>
+      </p>
+    </div>
+    
+    <!-- Due Date -->
+    <div class="col-span-2 text-center">
+      <p class="text-sm text-gray-500">Due Date</p>
+      <p class="text-sm font-medium text-gray-900">
+        <%= invoice.expiry_date.strftime("%b %d, %Y") %>
+      </p>
+    </div>
+    
+    <!-- Status -->
+    <div class="col-span-2 text-center">
+      <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium
+        <%= case invoice.effective_state
+            when 'paid' then 'bg-green-100 text-green-800'
+            when 'overdue' then 'bg-red-100 text-red-800'
+            else 'bg-yellow-100 text-yellow-800'
+            end %>">
+        <%= invoice.effective_state.humanize %>
+      </span>
+    </div>
+    
+    <!-- Actions -->
+    <div class="col-span-2 flex justify-center space-x-3">
+      <%= link_to "View", invoice_path(invoice), class: "text-blue-600 hover:text-blue-900 text-sm font-medium" %>
+      <%= link_to "Edit", edit_invoice_path(invoice), class: "text-indigo-600 hover:text-indigo-900 text-sm font-medium" %>
+      <%= link_to "Delete", invoice_path(invoice), method: :delete, 
+          data: { confirm: "Are you sure?" }, 
+          class: "text-red-600 hover:text-red-900 text-sm font-medium" %>
+    </div>
+  </div>
+</li>

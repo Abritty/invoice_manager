@@ -25,6 +25,9 @@ gem "bcrypt", "~> 3.1.7"
 # Phone number validation
 gem "phonelib"
 
+# Pagination
+gem "kaminari"
+
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
 gem "tzinfo-data", platforms: %i[ mswin mingw x64_mingw jruby ]
 

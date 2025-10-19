@@ -16,6 +16,9 @@ class InvoicesController < ApplicationController
     
     # Apply sorting
     @invoices = @invoices.sort_invoices_by(params[:sort])
+    
+    # Apply pagination
+    @invoices = @invoices.page(params[:page])
   end
 
   def show

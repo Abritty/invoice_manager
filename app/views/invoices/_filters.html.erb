@@ -1,0 +1,25 @@
+<!-- Search and Filter Form -->
+<div class="bg-white shadow rounded-lg p-6 mb-6 w-full">
+  <%= form_with url: invoices_path, method: :get, local: true, class: "flex flex-wrap gap-4" do |form| %>
+    <div class="flex-1 min-w-64">
+      <%= form.text_field :search, placeholder: "Search by buyer name...", value: params[:search], class: "w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" %>
+    </div>
+    
+    <div>
+      <%= form.select :state, options_for_select([
+        ['All States', ''],
+        ['Sent', 'sent'],
+        ['Paid', 'paid'],
+        ['Overdue', 'overdue']
+      ], params[:state]), {}, { class: "px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" } %>
+    </div>
+    
+    <div>
+      <%= form.select :sort, options_for_select(Invoice.sort_options_for_select, params[:sort]), {}, { class: "px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" } %>
+    </div>
+    
+    <div>
+      <%= form.submit "Filter", class: "bg-gray-600 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded" %>
+    </div>
+  <% end %>
+</div>

@@ -85,6 +85,21 @@ RSpec.describe InvoicesController, type: :controller do
       get :index, params: { sort: "buyer_name_asc" }
       expect(assigns(:invoices).first.buyer_name).to eq("Alpha Corp")
     end
+
+    it "paginates results" do
+      # Create 15 invoices to test pagination (default per_page is 10)
+      15.times do |i|
+        user.invoices.create!(valid_attributes.merge(buyer_name: "Company #{i}"))
+      end
+      
+      get :index, params: { page: 1 }
+      expect(assigns(:invoices).count).to eq(10)
+      expect(assigns(:invoices).current_page).to eq(1)
+      
+      get :index, params: { page: 2 }
+      expect(assigns(:invoices).count).to eq(5)
+      expect(assigns(:invoices).current_page).to eq(2)
+    end
   end
 
   describe "GET #show" do

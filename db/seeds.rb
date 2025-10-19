@@ -40,20 +40,32 @@ end
 
 puts "Created #{users.count} users"
 
-# Helper method to generate valid phone numbers
-def generate_phone_number
-  "+1 (#{rand(100..999)}) #{rand(100..999)}-#{rand(1000..9999)}"
-end
+# Valid phone numbers for different regions (phonelib compatible)
+phone_numbers = [
+  "+1 202 555 1234",
+  "+1 202 555 2345", 
+  "+1 202 555 3456",
+  "+1 202 555 4567",
+  "+1 202 555 5678",
+  "+44 20 7946 0958",
+  "+44 20 7946 0959",
+  "+44 20 7946 0960",
+  "+44 20 7946 0961",
+  "+44 20 7946 0962",
+  "+49 30 12345678",
+  "+49 30 12345679",
+  "+49 30 12345680"
+]
 
-# Create 5 invoices for each user with Faker data
+# Create 20 invoices for each user with Faker data (to test pagination)
 users.each do |user|
-  # 2 sent invoices
-  2.times do
+  # 8 sent invoices
+  8.times do
     issue_date = rand(1..10).days.ago
     Invoice.create!(
       user: user,
       buyer_name: Faker::Company.name,
-      phone_number: generate_phone_number,
+      phone_number: phone_numbers.sample,
       invoice_issue_date: issue_date,
       expiry_date: issue_date + rand(15..30).days,
       amount: rand(1000..5000).round(2),
@@ -61,13 +73,13 @@ users.each do |user|
     )
   end
 
-  # 2 paid invoices
-  2.times do
+  # 8 paid invoices
+  8.times do
     issue_date = rand(20..40).days.ago
     Invoice.create!(
       user: user,
       buyer_name: Faker::Company.name,
-      phone_number: generate_phone_number,
+      phone_number: phone_numbers.sample,
       invoice_issue_date: issue_date,
       expiry_date: issue_date + rand(5..25).days,
       amount: rand(1000..5000).round(2),
@@ -75,17 +87,19 @@ users.each do |user|
     )
   end
 
-  # 1 overdue invoice
-  issue_date = rand(15..30).days.ago
-  Invoice.create!(
-    user: user,
-    buyer_name: Faker::Company.name,
-    phone_number: generate_phone_number,
-    invoice_issue_date: issue_date,
-    expiry_date: issue_date + rand(1..10).days,  # This will be in the past
-    amount: rand(1000..5000).round(2),
-    state: :sent  # Will be calculated as overdue by the model
-  )
+  # 4 overdue invoices
+  4.times do
+    issue_date = rand(15..30).days.ago
+    Invoice.create!(
+      user: user,
+      buyer_name: Faker::Company.name,
+      phone_number: phone_numbers.sample,
+      invoice_issue_date: issue_date,
+      expiry_date: issue_date + rand(1..10).days,  # This will be in the past
+      amount: rand(1000..5000).round(2),
+      state: :sent  # Will be calculated as overdue by the model
+    )
+  end
 end
 
 puts "Created #{Invoice.count} invoices"
