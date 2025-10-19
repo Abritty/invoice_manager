@@ -5,6 +5,12 @@ RSpec.describe RegistrationsController, type: :controller do
     it 'should get new registration page' do
       get :new
       expect(response).to have_http_status(:success)
+      expect(response).to render_template(:new)
+    end
+
+    it 'should assign a new user' do
+      get :new
+      expect(assigns(:user)).to be_a_new(User)
     end
   end
 
@@ -61,8 +67,14 @@ RSpec.describe RegistrationsController, type: :controller do
       it 'should render new template' do
         post :create, params: invalid_attributes
         expect(response).to have_http_status(:unprocessable_entity)
-        # Note: render_template matcher requires rails-controller-testing gem
-        # For now, we verify the status code which indicates the form was re-rendered
+        expect(response).to render_template(:new)
+      end
+
+
+      it 'should not save user with invalid attributes' do
+        expect {
+          post :create, params: invalid_attributes
+        }.not_to change(User, :count)
       end
     end
   end
