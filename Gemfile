@@ -57,6 +57,9 @@ group :development, :test do
 
   # RSpec for testing
   gem "rspec-rails"
+  
+  # Faker for generating fake data
+  gem "faker"
 end
 
 group :development do
