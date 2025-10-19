@@ -10,11 +10,15 @@
 
 # Create test users for development and testing
 User.find_or_create_by!(email_address: "admin@example.com") do |user|
+  user.first_name = "Admin"
+  user.last_name = "User"
   user.password = "password123"
   user.password_confirmation = "password123"
 end
 
 User.find_or_create_by!(email_address: "test@example.com") do |user|
+  user.first_name = "Test"
+  user.last_name = "User"
   user.password = "test123"
   user.password_confirmation = "test123"
 end
