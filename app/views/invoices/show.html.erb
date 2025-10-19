@@ -40,12 +40,7 @@
           <div class="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
             <dt class="text-sm font-medium text-gray-500">Status</dt>
             <dd class="mt-1 text-sm sm:mt-0 sm:col-span-2">
-              <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium
-                <%= case @invoice.effective_state
-                    when 'paid' then 'bg-green-100 text-green-800'
-                    when 'overdue' then 'bg-red-100 text-red-800'
-                    else 'bg-yellow-100 text-yellow-800'
-                    end %>">
+              <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium <%= invoice_status_classes(@invoice) %>">
                 <%= @invoice.effective_state.humanize %>
               </span>
             </dd>
