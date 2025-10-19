@@ -9,6 +9,7 @@ class RegistrationsController < ApplicationController
     @user = User.new(user_params)
 
     if @user.save
+      reset_session
       start_new_session_for @user
       redirect_to root_path, notice: "Account created successfully!"
     else
