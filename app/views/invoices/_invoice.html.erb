@@ -41,8 +41,8 @@
     <div class="col-span-2 flex justify-center space-x-3">
       <%= link_to "View", invoice_path(invoice), class: "text-blue-600 hover:text-blue-900 text-sm font-medium" %>
       <%= link_to "Edit", edit_invoice_path(invoice), class: "text-indigo-600 hover:text-indigo-900 text-sm font-medium" %>
-      <%= link_to "Delete", invoice_path(invoice), method: :delete, 
-          data: { confirm: "Are you sure?" }, 
+      <%= link_to "Delete", invoice_path(invoice), 
+          data: { "turbo-method": "delete", confirm: "Are you sure?" }, 
           class: "text-red-600 hover:text-red-900 text-sm font-medium" %>
     </div>
   </div>
