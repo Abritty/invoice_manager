@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_10_19_011403) do
+ActiveRecord::Schema[8.0].define(version: 2025_10_19_190136) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -42,6 +42,24 @@ ActiveRecord::Schema[8.0].define(version: 2025_10_19_011403) do
     t.index ["blob_id", "variation_digest"], name: "index_active_storage_variant_records_uniqueness", unique: true
   end
 
+  create_table "invoices", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.string "buyer_name"
+    t.string "phone_number"
+    t.date "invoice_issue_date"
+    t.date "expiry_date"
+    t.decimal "amount", precision: 10, scale: 2
+    t.integer "state", default: 0
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["buyer_name"], name: "index_invoices_on_buyer_name"
+    t.index ["expiry_date"], name: "index_invoices_on_expiry_date"
+    t.index ["state"], name: "index_invoices_on_state"
+    t.index ["user_id", "expiry_date"], name: "index_invoices_on_user_id_and_expiry_date"
+    t.index ["user_id", "state"], name: "index_invoices_on_user_id_and_state"
+    t.index ["user_id"], name: "index_invoices_on_user_id"
+  end
+
   create_table "sessions", force: :cascade do |t|
     t.bigint "user_id", null: false
     t.string "ip_address"
@@ -63,5 +81,6 @@ ActiveRecord::Schema[8.0].define(version: 2025_10_19_011403) do
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
+  add_foreign_key "invoices", "users"
   add_foreign_key "sessions", "users"
 end
