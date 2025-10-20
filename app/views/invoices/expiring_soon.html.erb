@@ -1,17 +1,13 @@
 <div class="min-h-screen bg-gray-50 py-8">
   <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
     <div class="mb-8 flex justify-between items-center">
-      <h1 class="text-3xl font-bold text-gray-900">Invoices</h1>
-      <%= link_to "New Invoice",
-            new_invoice_path,
-            class: "bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" %>
+      <h1 class="text-3xl font-bold text-gray-900">Invoices Expiring in 3 Days</h1>
+      <%= link_to "Back to Invoices",
+            invoices_path,
+            class: "bg-gray-600 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded" %>
     </div>
 
-    <%= render "stats_bar", overdue_count: @overdue_count, overdue_sum: @overdue_sum %>
-    
-    <%= render "filters" %>
-
-     <div class="bg-white shadow sm:rounded-lg w-full mx-auto">
+    <div class="bg-white shadow sm:rounded-lg w-full mx-auto">
       <% if @invoices.any? %>
         <!-- Table Header -->
         <div class="px-8 py-4 bg-gray-50 border-b border-gray-200">
@@ -34,8 +30,12 @@
           <%= paginate @invoices %>
         </div>
       <% else %>
-        <%= render "empty_state" %>
+        <div class="p-8 text-center">
+          <p class="text-gray-600">No invoices are expiring within the next 3 days.</p>
+        </div>
       <% end %>
     </div>
   </div>
 </div>
+
+

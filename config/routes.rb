@@ -2,7 +2,11 @@ Rails.application.routes.draw do
   resource :session
   resources :registrations, only: [:new, :create]
   resources :passwords, param: :token
-  resources :invoices
+  resources :invoices do
+    collection do
+      get :expiring_soon
+    end
+  end
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
   # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.

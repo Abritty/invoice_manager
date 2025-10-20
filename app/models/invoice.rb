@@ -18,14 +18,15 @@ class Invoice < ApplicationRecord
   scope :search_by_buyer_name, ->(query) { where("buyer_name ILIKE ?", "%#{query}%") }
   scope :filter_by_state, ->(state) { where(state: state) }
   scope :sent_overdue, -> { sent.where("expiry_date < ?", Date.current) }
-
-  def overdue?
-    state == 'overdue'
-  end
+  scope :expiring_soon, -> {
+        today = Date.current
+        sent.where(expiry_date: today..(today + 3.days))
+  }
 
   def effective_state
     return 'paid' if paid?
     return 'overdue' if overdue?
+  
     'sent'
   end
 

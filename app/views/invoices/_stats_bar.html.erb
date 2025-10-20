@@ -1,0 +1,22 @@
+<!-- Overdue Stats and Expiring Soon Link -->
+<div class="bg-white shadow rounded-lg p-6 mb-6 w-full">
+  <div class="grid grid-cols-1 sm:grid-cols-3 gap-6 items-center">
+    <div>
+      <p class="text-sm text-gray-500">Overdue invoices</p>
+      <p class="text-2xl font-semibold text-gray-900"><%= overdue_count %></p>
+    </div>
+    <div>
+      <p class="text-sm text-gray-500">Total overdue amount</p>
+      <p class="text-2xl font-semibold text-gray-900">
+        <%= number_to_currency(overdue_sum, unit: "€", precision: 2) %>
+      </p>
+    </div>
+    <div class="sm:text-right">
+      <%= link_to "Invoices expiring soon",
+                  expiring_soon_invoices_path,
+                  class: "inline-block bg-yellow-500 hover:bg-yellow-600 text-white font-bold py-2 px-4 rounded" %>
+    </div>
+  </div>
+</div>
+
+

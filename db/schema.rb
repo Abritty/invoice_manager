@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_10_19_190136) do
+ActiveRecord::Schema[8.0].define(version: 2025_10_20_123000) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -56,6 +56,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_10_19_190136) do
     t.index ["expiry_date"], name: "index_invoices_on_expiry_date"
     t.index ["state"], name: "index_invoices_on_state"
     t.index ["user_id", "expiry_date"], name: "index_invoices_on_user_id_and_expiry_date"
+    t.index ["user_id", "state", "expiry_date"], name: "index_invoices_on_user_state_expiry_date"
     t.index ["user_id", "state"], name: "index_invoices_on_user_id_and_state"
     t.index ["user_id"], name: "index_invoices_on_user_id"
   end
