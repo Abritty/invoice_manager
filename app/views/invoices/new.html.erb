@@ -67,11 +67,12 @@
           <div>
             <%= form.label :state, "Status", class: "block text-sm font-medium text-gray-700" %>
             <%= form.select :state, options_for_select([
+              ['Select Status', ''],
               ['Sent', 'sent'],
               ['Paid', 'paid'],
               ['Overdue', 'overdue']
-            ], 'sent'), {}, { class: "mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm" } %>
-            <p class="mt-2 text-sm text-gray-500">New invoices default to "Sent" status.</p>
+            ]), {}, { class: "mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm" } %>
+            <p class="mt-2 text-sm text-gray-500">Please select the invoice status.</p>
           </div>
 
           <div class="flex justify-end space-x-3">

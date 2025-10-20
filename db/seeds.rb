@@ -87,8 +87,8 @@ users.each do |user|
     )
   end
 
-  # 4 overdue invoices
-  4.times do
+  # 2 explicitly overdue invoices
+  2.times do
     issue_date = rand(15..30).days.ago
     Invoice.create!(
       user: user,
@@ -97,7 +97,21 @@ users.each do |user|
       invoice_issue_date: issue_date,
       expiry_date: issue_date + rand(1..10).days,  # This will be in the past
       amount: rand(1000..5000).round(2),
-      state: :sent  # Will be calculated as overdue by the model
+      state: :overdue  # Explicitly overdue
+    )
+  end
+
+  # 2 sent invoices that will be marked overdue by rake task
+  2.times do
+    issue_date = rand(15..30).days.ago
+    Invoice.create!(
+      user: user,
+      buyer_name: Faker::Company.name,
+      phone_number: phone_numbers.sample,
+      invoice_issue_date: issue_date,
+      expiry_date: issue_date + rand(1..10).days,  # This will be in the past
+      amount: rand(1000..5000).round(2),
+      state: :sent  # Will be marked overdue by rake task
     )
   end
 end
@@ -110,14 +124,14 @@ puts "Users: #{User.count}"
 puts "Invoices: #{Invoice.count}"
 puts "Paid invoices: #{Invoice.paid.count}"
 puts "Sent invoices: #{Invoice.sent.count}"
-puts "Overdue invoices: #{Invoice.select(&:overdue?).count}"
+puts "Overdue invoices: #{Invoice.overdue.count}"
 
 puts "\nTest Users:"
 users.each do |user|
   user_invoices = user.invoices
   paid_count = user_invoices.paid.count
   sent_count = user_invoices.sent.count
-  overdue_count = user_invoices.select(&:overdue?).count
+  overdue_count = user_invoices.overdue.count
   
   puts "- #{user.email_address} (#{user.full_name})"
   puts "  Invoices: #{user_invoices.count} (Paid: #{paid_count}, Sent: #{sent_count}, Overdue: #{overdue_count})"

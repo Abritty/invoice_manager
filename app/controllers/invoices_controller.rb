@@ -30,7 +30,6 @@ class InvoicesController < ApplicationController
 
   def create
     @invoice = current_user.invoices.build(invoice_params)
-    @invoice.state = :sent # Default state
 
     if @invoice.save
       redirect_to @invoice, notice: 'Invoice was successfully created.'

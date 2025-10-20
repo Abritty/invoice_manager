@@ -17,9 +17,10 @@ class Invoice < ApplicationRecord
 
   scope :search_by_buyer_name, ->(query) { where("buyer_name ILIKE ?", "%#{query}%") }
   scope :filter_by_state, ->(state) { where(state: state) }
+  scope :sent_overdue, -> { sent.where("expiry_date < ?", Date.current) }
 
   def overdue?
-    !paid? && Date.current > expiry_date
+    state == 'overdue'
   end
 
   def effective_state
@@ -30,6 +31,10 @@ class Invoice < ApplicationRecord
 
   def formatted_amount
     ActionController::Base.helpers.number_to_currency(amount, unit: "€", precision: 2)
+  end
+
+  def self.mark_overdue_invoices!
+    sent_overdue.update_all(state: :overdue)
   end
 
   private

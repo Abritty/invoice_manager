@@ -156,9 +156,19 @@ RSpec.describe InvoicesController, type: :controller do
         expect(response).to redirect_to(Invoice.last)
       end
 
-      it "sets the invoice state to sent by default" do
+      it "sets the invoice state to what user provides" do
         post :create, params: { invoice: valid_attributes }
         expect(Invoice.last.state).to eq('sent')
+      end
+
+      it "allows creating invoices with different states" do
+        paid_attributes = valid_attributes.merge(state: 'paid')
+        post :create, params: { invoice: paid_attributes }
+        expect(Invoice.last.state).to eq('paid')
+
+        overdue_attributes = valid_attributes.merge(state: 'overdue')
+        post :create, params: { invoice: overdue_attributes }
+        expect(Invoice.last.state).to eq('overdue')
       end
     end
 
@@ -177,6 +187,12 @@ RSpec.describe InvoicesController, type: :controller do
       it "returns unprocessable entity status" do
         post :create, params: { invoice: invalid_attributes }
         expect(response).to have_http_status(:unprocessable_entity)
+      end
+
+      it "validates state is required" do
+        attributes_without_state = valid_attributes.merge(state: "")
+        post :create, params: { invoice: attributes_without_state }
+        expect(assigns(:invoice).errors[:state]).to include("can't be blank")
       end
     end
   end

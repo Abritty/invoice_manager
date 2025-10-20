@@ -59,6 +59,34 @@ Each user has:
 
 All data is generated using the Faker gem with random company names, phone numbers, and amounts between €1,000-€5,000.
 
+### Automated Overdue Invoice Processing
+
+The application includes an automated system to mark invoices as overdue:
+
+#### Daily Cron Job
+A rake task runs automatically every day at 12:00 AM to mark sent invoices as overdue if their expiry date has passed.
+
+#### Setup Cron Job
+```bash
+# Show the current cron schedule
+bundle exec rake cron:show
+
+# Install the cron job (requires sudo)
+bundle exec rake cron:install
+
+# Update the cron job
+bundle exec rake cron:update
+
+# Remove the cron job
+bundle exec rake cron:remove
+```
+
+#### Manual Execution
+```bash
+# Run the overdue invoice task manually
+bundle exec rake invoices:mark_overdue
+```
+
 ### Testing
 
 Run the test suite:

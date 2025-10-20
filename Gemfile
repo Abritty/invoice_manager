@@ -28,6 +28,9 @@ gem "phonelib"
 # Pagination
 gem "kaminari"
 
+# Cron job scheduling
+gem "whenever", require: false
+
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
 gem "tzinfo-data", platforms: %i[ mswin mingw x64_mingw jruby ]
 

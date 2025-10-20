@@ -174,19 +174,16 @@ RSpec.describe Invoice, type: :model do
     describe '#overdue?' do
       it 'should return false for paid invoices' do
         invoice.state = :paid
-        invoice.expiry_date = Date.current - 1.day
         expect(invoice.overdue?).to be false
       end
 
-      it 'should return false for invoices not yet expired' do
+      it 'should return false for sent invoices' do
         invoice.state = :sent
-        invoice.expiry_date = Date.current + 1.day
         expect(invoice.overdue?).to be false
       end
 
-      it 'should return true for unpaid invoices past expiry date' do
-        invoice.state = :sent
-        invoice.expiry_date = Date.current - 1.day
+      it 'should return true only for invoices with overdue state' do
+        invoice.state = :overdue
         expect(invoice.overdue?).to be true
       end
     end
@@ -197,15 +194,13 @@ RSpec.describe Invoice, type: :model do
         expect(invoice.effective_state).to eq('paid')
       end
 
-      it 'should return overdue for overdue invoices' do
-        invoice.state = :sent
-        invoice.expiry_date = Date.current - 1.day
+      it 'should return overdue for invoices with overdue state' do
+        invoice.state = :overdue
         expect(invoice.effective_state).to eq('overdue')
       end
 
-      it 'should return sent for non-overdue sent invoices' do
+      it 'should return sent for sent invoices' do
         invoice.state = :sent
-        invoice.expiry_date = Date.current + 1.day
         expect(invoice.effective_state).to eq('sent')
       end
     end
@@ -219,6 +214,90 @@ RSpec.describe Invoice, type: :model do
       it 'should handle zero amount' do
         invoice.amount = 0
         expect(invoice.formatted_amount).to eq('€0.00')
+      end
+    end
+  end
+
+  describe 'class methods' do
+    describe '.sent_overdue' do
+      let!(:sent_overdue_invoice) do
+        Invoice.create!(
+          user: user,
+          buyer_name: "Overdue Corp",
+          phone_number: "+1 202 555 1234",
+          invoice_issue_date: Date.current - 10.days,
+          expiry_date: Date.current - 1.day,
+          amount: 1000.00,
+          state: :sent
+        )
+      end
+
+      let!(:sent_current_invoice) do
+        Invoice.create!(
+          user: user,
+          buyer_name: "Current Corp",
+          phone_number: "+1 202 555 2345",
+          invoice_issue_date: Date.current - 5.days,
+          expiry_date: Date.current + 5.days,
+          amount: 2000.00,
+          state: :sent
+        )
+      end
+
+      let!(:paid_overdue_invoice) do
+        Invoice.create!(
+          user: user,
+          buyer_name: "Paid Corp",
+          phone_number: "+1 202 555 3456",
+          invoice_issue_date: Date.current - 10.days,
+          expiry_date: Date.current - 1.day,
+          amount: 3000.00,
+          state: :paid
+        )
+      end
+
+      it 'should return only sent invoices past their expiry date' do
+        overdue_invoices = Invoice.sent_overdue
+        expect(overdue_invoices).to include(sent_overdue_invoice)
+        expect(overdue_invoices).not_to include(sent_current_invoice)
+        expect(overdue_invoices).not_to include(paid_overdue_invoice)
+      end
+    end
+
+    describe '.mark_overdue_invoices!' do
+      let!(:sent_overdue_invoice) do
+        Invoice.create!(
+          user: user,
+          buyer_name: "Overdue Corp",
+          phone_number: "+1 202 555 1234",
+          invoice_issue_date: Date.current - 10.days,
+          expiry_date: Date.current - 1.day,
+          amount: 1000.00,
+          state: :sent
+        )
+      end
+
+      let!(:sent_current_invoice) do
+        Invoice.create!(
+          user: user,
+          buyer_name: "Current Corp",
+          phone_number: "+1 202 555 2345",
+          invoice_issue_date: Date.current - 5.days,
+          expiry_date: Date.current + 5.days,
+          amount: 2000.00,
+          state: :sent
+        )
+      end
+
+      it 'should mark sent overdue invoices as overdue' do
+        expect { Invoice.mark_overdue_invoices! }
+          .to change { sent_overdue_invoice.reload.state }
+          .from('sent').to('overdue')
+      end
+
+      it 'should not change current sent invoices' do
+        expect { Invoice.mark_overdue_invoices! }
+          .not_to change { sent_current_invoice.reload.state }
       end
     end
   end
