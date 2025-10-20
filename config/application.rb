@@ -23,5 +23,8 @@ module InvoiceManager
     #
     # config.time_zone = "Central Time (US & Canada)"
     # config.eager_load_paths << Rails.root.join("extras")
+    
+    # Require Kaminari for pagination
+    require 'kaminari'
   end
 end

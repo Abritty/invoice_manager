@@ -1,0 +1,87 @@
+<div class="min-h-screen bg-gray-50 py-8">
+  <div class="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="mb-8">
+      <h1 class="text-3xl font-bold text-gray-900">New Invoice</h1>
+      <p class="mt-2 text-sm text-gray-600">Create a new invoice for your client.</p>
+    </div>
+
+    <div class="bg-white shadow sm:rounded-lg">
+      <div class="px-4 py-5 sm:p-6">
+        <%= form_with model: @invoice, local: true, class: "space-y-6" do |form| %>
+          <% if @invoice.errors.any? %>
+            <div class="bg-red-50 border border-red-200 rounded-md p-4">
+              <div class="flex">
+                <div class="flex-shrink-0">
+                  <svg class="h-5 w-5 text-red-400" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd" />
+                  </svg>
+                </div>
+                <div class="ml-3">
+                  <h3 class="text-sm font-medium text-red-800">There were some problems with your submission:</h3>
+                  <div class="mt-2 text-sm text-red-700">
+                    <ul class="list-disc list-inside space-y-1">
+                      <% @invoice.errors.full_messages.each do |message| %>
+                        <li><%= message %></li>
+                      <% end %>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </div>
+          <% end %>
+
+          <div class="grid grid-cols-1 gap-6 sm:grid-cols-2">
+            <div>
+              <%= form.label :buyer_name, "Buyer Name", class: "block text-sm font-medium text-gray-700" %>
+              <%= form.text_field :buyer_name, class: "mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm" %>
+            </div>
+
+            <div>
+              <%= form.label :phone_number, "Phone Number", class: "block text-sm font-medium text-gray-700" %>
+              <%= form.text_field :phone_number, placeholder: "+1 (555) 123-4567", class: "mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm" %>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 gap-6 sm:grid-cols-2">
+            <div>
+              <%= form.label :invoice_issue_date, "Invoice Issue Date", class: "block text-sm font-medium text-gray-700" %>
+              <%= form.date_field :invoice_issue_date, value: Date.current, class: "mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm" %>
+            </div>
+
+            <div>
+              <%= form.label :expiry_date, "Expiry Date", class: "block text-sm font-medium text-gray-700" %>
+              <%= form.date_field :expiry_date, class: "mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm" %>
+            </div>
+          </div>
+
+          <div>
+            <%= form.label :amount, "Amount (EUR)", class: "block text-sm font-medium text-gray-700" %>
+            <div class="mt-1 relative rounded-md shadow-sm">
+              <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                <span class="text-gray-500 sm:text-sm">€</span>
+              </div>
+              <%= form.number_field :amount, step: 0.01, min: 0, placeholder: "0.00", class: "focus:ring-blue-500 focus:border-blue-500 block w-full pl-7 pr-12 sm:text-sm border-gray-300 rounded-md" %>
+            </div>
+          </div>
+
+          <div>
+            <%= form.label :state, "Status", class: "block text-sm font-medium text-gray-700" %>
+            <%= form.select :state, options_for_select([
+              ['Select Status', ''],
+              ['Sent', 'sent'],
+              ['Paid', 'paid'],
+              ['Overdue', 'overdue']
+            ]), {}, { class: "mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm" } %>
+            <p class="mt-2 text-sm text-gray-500">Please select the invoice status.</p>
+          </div>
+
+          <div class="flex justify-end space-x-3">
+            <%= link_to "Cancel", invoices_path, class: "bg-white py-2 px-4 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500" %>
+            <%= form.submit "Create Invoice", class: "bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500" %>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>
+

@@ -1,0 +1,39 @@
+<div class="min-h-screen bg-gray-50 py-8">
+  <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="mb-8 flex justify-between items-center">
+      <h1 class="text-3xl font-bold text-gray-900">Invoices</h1>
+      <%= link_to "New Invoice",
+            new_invoice_path,
+            class: "bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" %>
+    </div>
+
+    <%= render "filters" %>
+
+     <div class="bg-white shadow sm:rounded-lg w-full mx-auto">
+      <% if @invoices.any? %>
+        <!-- Table Header -->
+        <div class="px-8 py-4 bg-gray-50 border-b border-gray-200">
+          <div class="grid grid-cols-12 gap-4 items-center text-sm font-medium text-gray-500 uppercase tracking-wider">
+            <div class="col-span-4 text-left">Buyer</div>
+            <div class="col-span-2 text-center">Amount</div>
+            <div class="col-span-2 text-center">Due Date</div>
+            <div class="col-span-2 text-center">Status</div>
+            <div class="col-span-2 text-center">Actions</div>
+          </div>
+        </div>
+        
+        <!-- Invoice Rows -->
+        <ul class="divide-y divide-gray-200 list-none pl-0">
+          <%= render partial: "invoice", collection: @invoices %>
+        </ul>
+        
+        <!-- Pagination -->
+        <div class="px-8 py-4 bg-gray-50 border-t border-gray-200">
+          <%= paginate @invoices %>
+        </div>
+      <% else %>
+        <%= render "empty_state" %>
+      <% end %>
+    </div>
+  </div>
+</div>
