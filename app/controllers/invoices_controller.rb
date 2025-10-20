@@ -2,6 +2,10 @@ class InvoicesController < ApplicationController
   before_action :set_invoice, only: [:show, :edit, :update, :destroy]
 
   def index
+    # Overdue statistics (across all invoices for current user)
+    @overdue_count = current_user.invoices.overdue.count
+    @overdue_sum = current_user.invoices.overdue.sum(:amount)
+
     @invoices = current_user.invoices.includes(:user)
     
     # Search functionality
@@ -18,6 +22,12 @@ class InvoicesController < ApplicationController
     @invoices = @invoices.sort_invoices_by(params[:sort])
     
     # Apply pagination
+    @invoices = @invoices.page(params[:page])
+  end
+
+  def expiring_soon
+    @invoices = current_user.invoices.expiring_soon
+    @invoices = @invoices.sort_invoices_by(params[:sort])
     @invoices = @invoices.page(params[:page])
   end
 
