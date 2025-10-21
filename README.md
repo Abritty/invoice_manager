@@ -2,6 +2,8 @@
 
 A comprehensive invoice management application built with Ruby on Rails 8 and Tailwind CSS.
 
+For better understanding, visit the [presentation](https://docs.google.com/presentation/d/17fcIGFppBCAGCNb9wUbX9VlGeua7AVRQoTuVQ96XeHo/edit?usp=sharing).
+
 ## Features
 
 - **User Authentication**: Secure user registration, login, and session management
@@ -17,7 +19,7 @@ A comprehensive invoice management application built with Ruby on Rails 8 and Ta
 
 - Ruby 3.4.2
 - Rails 8.0.3
-- PostgreSQL (or your preferred database)
+- PostgreSQL
 
 ### Installation
 
