@@ -123,21 +123,6 @@ bundle exec rspec spec/controllers/invoices_controller_spec.rb
 - **User Isolation**: Users can only see and manage their own invoices
 - **Currency**: All amounts are in EUR with proper formatting
 
-## Development
-
-### Code Quality
-
-Run linters and security checks:
-```bash
-bin/rubocop
-bin/brakeman -q
-```
-
-Check autoloading:
-```bash
-bin/rails zeitwerk:check
-```
-
 ## License
 
 This project is licensed under the MIT License.
